@@ -1,0 +1,24 @@
+.cell {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	transition: top 0.1s linear, left 0.1s linear;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	user-select: none;
+
+	&__content {
+		font-size: 18px;
+		font-weight: 700;
+		color: #747474;
+		width: 90px;
+		height: 90px;
+		border-radius: 4px;
+		background: peachpuff;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		transition: background-color 0.1s ease-in;
+	}
+}
