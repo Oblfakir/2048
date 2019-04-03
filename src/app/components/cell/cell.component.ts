@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ICellProps} from '../../interfaces/cell-props.interface';
 
 @Component({
 	selector: 'app-cell',
@@ -8,13 +7,15 @@ import {ICellProps} from '../../interfaces/cell-props.interface';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CellComponent {
-	@Input() public props: ICellProps;
+	@Input() public value: number;
+	@Input() public X: number;
+	@Input() public Y: number;
 
 	public get top(): string {
-		return this.props ? `${this.props.Y * 100}px` : '0';
+		return `${this.Y * 100}px`;
 	}
 
 	public get left(): string {
-		return this.props ? `${this.props.X * 100}px` : '0';
+		return `${this.X * 100}px`;
 	}
 }

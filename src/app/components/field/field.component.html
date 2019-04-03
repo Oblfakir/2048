@@ -1,3 +1,6 @@
-<div class="field">
-	<app-cell [props]="cellProps"></app-cell>
+<div class="field" *ngIf="cellProps">
+	<app-cell *ngFor="let cellProp of cellProps"
+			  [X]="cellProp.X"
+			  [Y]="cellProp.Y"
+			  [value]="cellProp.value"></app-cell>
 </div>

@@ -1,4 +1,4 @@
-import {HostListener, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {Swipes} from '../constants';
 
@@ -10,26 +10,20 @@ export class SwipesService {
 	private _isMouseDown: boolean;
 	private _coordinates: { x: number, y: number }[] = [];
 
-	@HostListener('document:mousedown')
-	private _mousedownHandler() {
-		this._isMouseDown = true;
-	}
-
-	@HostListener('document:mouseup')
-	private _mouseupHandler() {
-		this._isMouseDown = false;
-		this._calculateSwipe();
-	}
-
-	@HostListener('document:mousemove', ['$event'])
-	private _mousemoveHandler(event: any) {
-		const { clientX, clientY } = event;
-
-		this._coordinates.push({ x: clientX, y: clientY });
-	}
-
 	public get swipes(): Observable<Swipes> {
 		return this._swipes.asObservable();
+	}
+
+	public setMouseDownState(state: boolean): void {
+		this._isMouseDown = state;
+
+		if (!state) {
+			this._calculateSwipe();
+		}
+	}
+
+	public addMovementCoordinates(coordinates: { x: number, y: number }): void {
+		this._coordinates.push(coordinates);
 	}
 
 	private _calculateSwipe(): void {

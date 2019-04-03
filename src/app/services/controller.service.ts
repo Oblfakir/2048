@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {ICellProps} from '../interfaces/cell-props.interface';
-import {initialCells} from '../constants';
+import {initialCells, Swipes} from '../constants';
 import {SwipesService} from './swipes.service';
 
 @Injectable({
@@ -18,43 +18,42 @@ export class ControllerService {
 		return this._cells.asObservable();
 	}
 
-	_getEmptyCells() {
+	private _getEmptyCells() {
 
 	}
 
-	_addRandomCell() {
+	private _addRandomCell() {
 
 	}
 
-	_getPossibleCellValues() {
+	private _getPossibleCellValues() {
 
 	}
 
-	_subscribeToSwipes() {
-		// this.eventSource.swipes.subscribe((swipe) => {
-		// 	switch (swipe) {
-		// 		case Swipes.RIGHT: {
-		// 			const cell = this.cells.currentValue[0];
-		// 			this.cells.fireEvent([{...cell, posX: cell.posX - 1}]);
-		// 			break;
-		// 		}
-		// 		case Swipes.LEFT: {
-		// 			const cell = this.cells.currentValue[0];
-		// 			this.cells.fireEvent([{...cell, posX: cell.posX + 1}]);
-		// 			break;
-		// 		}
-		// 		case Swipes.UP: {
-		// 			const cell = this.cells.currentValue[0];
-		// 			this.cells.fireEvent([{...cell, posY: cell.posY - 1}]);
-		// 			break;
-		// 		}
-		// 		case Swipes.DOWN: {
-		// 			const cell = this.cells.currentValue[0];
-		// 			this.cells.fireEvent([{...cell, posY: cell.posY + 1}]);
-		// 			break;
-		// 		}
-		// 		default: break;
-		// 	}
-		// });
+	private _subscribeToSwipes() {
+		this.swipesService.swipes.subscribe((swipe: Swipes) => {
+			const cell = this._cells.getValue()[0];
+
+			switch (swipe) {
+				case Swipes.RIGHT: {
+					this._cells.next([{...cell, X: cell.X - 1}]);
+					break;
+				}
+				case Swipes.LEFT: {
+					this._cells.next([{...cell, X: cell.X + 1}]);
+					break;
+				}
+				case Swipes.UP: {
+					this._cells.next([{...cell, Y: cell.Y - 1}]);
+					break;
+				}
+				case Swipes.DOWN: {
+					this._cells.next([{...cell, Y: cell.Y + 1}]);
+					break;
+				}
+				default:
+					break;
+			}
+		});
 	}
 }
