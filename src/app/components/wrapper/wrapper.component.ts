@@ -11,21 +11,18 @@ import {ICellProps} from '../../interfaces/cell-props.interface';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WrapperComponent implements OnInit {
-	@HostListener('document:mousedown')
-	private _mousedownHandler() {
+	@HostListener('document:mousedown', ['$event'])
+	private _mousedownHandler(event: any) {
+		const { clientX, clientY } = event;
+		this.swipesService.addMovementCoordinates({ x: clientX, y: clientY });
 		this.swipesService.setMouseDownState(true);
 	}
 
-	@HostListener('document:mouseup')
-	private _mouseupHandler() {
-		this.swipesService.setMouseDownState(false);
-	}
-
-	@HostListener('document:mousemove', ['$event'])
-	private _mousemoveHandler(event: any) {
+	@HostListener('document:mouseup', ['$event'])
+	private _mouseupHandler(event: any) {
 		const { clientX, clientY } = event;
-
 		this.swipesService.addMovementCoordinates({ x: clientX, y: clientY });
+		this.swipesService.setMouseDownState(false);
 	}
 
 	constructor(private controllerService: ControllerService,
