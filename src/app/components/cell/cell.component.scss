@@ -1,6 +1,6 @@
 .cell {
-	width: 100px;
-	height: 100px;
+	width: 70px;
+	height: 70px;
 	position: absolute;
 	transition: top 0.1s linear, left 0.1s linear;
 	display: flex;
@@ -12,9 +12,9 @@
 		font-size: 18px;
 		font-weight: 700;
 		color: #747474;
-		width: 90px;
-		height: 90px;
-		border-radius: 4px;
+		width: 64px;
+		height: 64px;
+		border-radius: 3px;
 		background: peachpuff;
 		display: flex;
 		justify-content: center;

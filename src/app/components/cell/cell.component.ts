@@ -12,10 +12,10 @@ export class CellComponent {
 	@Input() public Y: number;
 
 	public get top(): string {
-		return `${this.Y * 100}px`;
+		return `${this.Y * 70}px`;
 	}
 
 	public get left(): string {
-		return `${this.X * 100}px`;
+		return `${this.X * 70}px`;
 	}
 }
