@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {ControllerService} from '../../services/controller.service';
-import {SwipesService} from '../../services/swipes.service';
 import {Observable} from 'rxjs';
-import {ICellProps} from '../../interfaces/cell-props.interface';
+import {IFieldState} from '../../interfaces/field-state.interface';
 
 @Component({
 	selector: 'app-wrapper',
@@ -11,15 +10,13 @@ import {ICellProps} from '../../interfaces/cell-props.interface';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WrapperComponent implements OnInit {
-	constructor(private controllerService: ControllerService,
-				private swipesService: SwipesService) {
+	constructor(private controllerService: ControllerService) {
 	}
 
-	public get cellProps(): Observable<ICellProps[]> {
-		return this.controllerService.cells;
+	public get fieldState(): Observable<IFieldState> {
+		return this.controllerService.fieldState;
 	}
 
 	ngOnInit() {
-		this.swipesService.swipes.subscribe(console.log);
 	}
 }

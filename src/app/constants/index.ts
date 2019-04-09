@@ -6,11 +6,3 @@ export enum Swipes {
 	UP = 'UP',
 	DOWN = 'DOWN'
 }
-
-export const initialCells: ICellProps[] = [
-	{
-		X: 0,
-		Y: 1,
-		value: 2
-	}
-];
