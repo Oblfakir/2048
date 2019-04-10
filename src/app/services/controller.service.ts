@@ -19,13 +19,13 @@ export class ControllerService {
 	constructor(private swipesService: SwipesService) {
 		const initialCells = [
 			[this._getEmptyCell(0, 0), this._getEmptyCell(1, 0), this._getEmptyCell(2, 0), this._getEmptyCell(3, 0)],
-			[this._getEmptyCell(0, 1), this._getEmptyCell(1, 1), this._getEmptyCell(2, 1), this._getEmptyCell(3, 1)],
+			[this._getEmptyCell(0, 1), this._getValueCell(1, 1, 2), this._getEmptyCell(2, 1), this._getEmptyCell(3, 1)],
 			[this._getEmptyCell(0, 2), this._getEmptyCell(1, 2), this._getEmptyCell(2, 2), this._getEmptyCell(3, 2)],
 			[this._getEmptyCell(0, 3), this._getEmptyCell(1, 3), this._getEmptyCell(2, 3), this._getEmptyCell(3, 3)]
 		];
 		const initialState = {
-			previousCells: initialCells,
-			currentCells: initialCells
+			previousCells: JSON.parse(JSON.stringify(initialCells)),
+			currentCells: JSON.parse(JSON.stringify(initialCells))
 		};
 		this._fieldState = new BehaviorSubject<IFieldState>(initialState);
 		this._subscribeToSwipes();
@@ -52,80 +52,46 @@ export class ControllerService {
 		};
 	}
 
+	private _getValueCell(X: number, Y: number, value: number): ICellProps {
+		return {...this._getEmptyCell(X, Y), value, isPresent: true};
+	}
+
 	private _subscribeToSwipes() {
 		this.swipesService.swipes.subscribe((swipe: Swipes) => {
+			const fieldState = this._fieldState.getValue();
+			const currentCells = JSON.parse(JSON.stringify(fieldState.currentCells));
+
+			fieldState.previousCells = currentCells;
+
 			switch (swipe) {
 				case Swipes.RIGHT: {
-					this._handleSwipeRIGHT();
+					fieldState.currentCells = currentCells.map(cellsArr => {
+						return cellsArr.map(cell => ({...cell, X: cell.X - 1}));
+					});
 					break;
 				}
 				case Swipes.LEFT: {
-					this._handleSwipeLEFT();
+					fieldState.currentCells = currentCells.map(cellsArr => {
+						return cellsArr.map(cell => ({...cell, X: cell.X + 1}));
+					});
 					break;
 				}
 				case Swipes.UP: {
-					this._handleSwipeUP();
+					fieldState.currentCells = currentCells.map(cellsArr => {
+						return cellsArr.map(cell => ({...cell, Y: cell.Y - 1}));
+					});
 					break;
 				}
 				case Swipes.DOWN: {
-					this._handleSwipeDOWN();
+					fieldState.currentCells = currentCells.map(cellsArr => {
+						return cellsArr.map(cell => ({...cell, Y: cell.Y + 1}));
+					});
 					break;
 				}
-				default:
-					break;
+				default: return;
 			}
+
+			this._fieldState.next(fieldState);
 		});
-	}
-
-	private _handleSwipeRIGHT(): void {
-		const fieldState = this._fieldState.getValue();
-		const currentCells = JSON.parse(JSON.stringify(fieldState.currentCells));
-		console.log(fieldState);
-
-		fieldState.previousCells = currentCells;
-		fieldState.currentCells = currentCells.map(cellsArr => {
-			cellsArr.map(cell => ({...cell, X: cell.X + 1}));
-		});
-
-		this._fieldState.next(fieldState);
-	}
-
-	private _handleSwipeLEFT(): void {
-		const fieldState = this._fieldState.getValue();
-		const currentCells = JSON.parse(JSON.stringify(fieldState.currentCells));
-		console.log(fieldState);
-
-		fieldState.previousCells = currentCells;
-		fieldState.currentCells = currentCells.map(cellsArr => {
-			cellsArr.map(cell => ({...cell, X: cell.X - 1}));
-		});
-
-		this._fieldState.next(fieldState);
-	}
-
-	private _handleSwipeUP(): void {
-		const fieldState = this._fieldState.getValue();
-		const currentCells = JSON.parse(JSON.stringify(fieldState.currentCells));
-		console.log(fieldState);
-
-		fieldState.previousCells = currentCells;
-		fieldState.currentCells = currentCells.map(cellsArr => {
-			cellsArr.map(cell => ({...cell, Y: cell.Y + 1}));
-		});
-
-		this._fieldState.next(fieldState);
-	}
-
-	private _handleSwipeDOWN(): void {
-		const fieldState = this._fieldState.getValue();
-		const currentCells = JSON.parse(JSON.stringify(fieldState.currentCells));
-		console.log(fieldState);
-
-		fieldState.previousCells = currentCells;
-		fieldState.currentCells = currentCells.map(cellsArr => {
-			cellsArr.map(cell => ({...cell, Y: cell.Y + 1}));
-		});
-
-		this._fieldState.next(fieldState);
 	}
 }

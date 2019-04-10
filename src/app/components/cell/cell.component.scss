@@ -2,16 +2,16 @@
 	width: 70px;
 	height: 70px;
 	position: absolute;
-	transition: top 0.1s linear, left 0.1s linear;
+	transition: top 100ms linear, left 100ms ease-in-out;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	user-select: none;
 
 	&__content {
-		font-size: 18px;
+		font-size: 20px;
 		font-weight: 700;
-		color: #747474;
+		color: black;
 		width: 64px;
 		height: 64px;
 		border-radius: 3px;
@@ -19,6 +19,6 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		transition: background-color 0.1s ease-in;
+		transition: background-color 50ms ease-in;
 	}
 }

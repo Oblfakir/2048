@@ -1,8 +1,8 @@
 <div class="field">
-	<ng-container *ngFor="let cellArr of fieldState.currentCells">
-		<app-cell *ngFor="let cellProp of cellArr"
-				  [X]="cellProp.X"
-				  [Y]="cellProp.Y"
-				  [value]="cellProp.value"></app-cell>
+	<ng-container *ngFor="let cellArr of cells; let i = index">
+		<app-cell *ngFor="let _ of cellArr; let j = index"
+				  [X]="fieldState.currentCells[i][j].X"
+				  [Y]="fieldState.currentCells[i][j].Y"
+				  [value]="fieldState.currentCells[i][j].value"></app-cell>
 	</ng-container>
 </div>

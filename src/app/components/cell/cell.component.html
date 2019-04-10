@@ -1,7 +1,7 @@
-<div class="cell" draggable="false"
+<div class="cell"
 	[style.top]="top"
 	[style.left]="left">
-	<div class="cell__content" draggable="false">
+	<div class="cell__content" *ngIf="value">
 		{{value}}
 	</div>
 </div>
