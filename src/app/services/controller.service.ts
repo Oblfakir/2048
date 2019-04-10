@@ -10,18 +10,13 @@ import {ICellProps} from '../interfaces/cell-props.interface';
 })
 export class ControllerService {
 	private _fieldState: BehaviorSubject<IFieldState>;
-	private _lastCellId = 0;
-	private get _nextCellId(): number {
-		this._lastCellId = this._lastCellId + 1;
-		return this._lastCellId;
-	}
 
 	constructor(private swipesService: SwipesService) {
 		const initialCells = [
-			[this._getEmptyCell(0, 0), this._getEmptyCell(1, 0), this._getEmptyCell(2, 0), this._getEmptyCell(3, 0)],
-			[this._getEmptyCell(0, 1), this._getValueCell(1, 1, 2), this._getEmptyCell(2, 1), this._getEmptyCell(3, 1)],
-			[this._getEmptyCell(0, 2), this._getEmptyCell(1, 2), this._getEmptyCell(2, 2), this._getEmptyCell(3, 2)],
-			[this._getEmptyCell(0, 3), this._getEmptyCell(1, 3), this._getEmptyCell(2, 3), this._getEmptyCell(3, 3)]
+			[this._getEmptyCell(), this._getEmptyCell(), this._getEmptyCell(), this._getEmptyCell()],
+			[this._getValueCell(0, 1, 4), this._getEmptyCell(), this._getValueCell(2, 1, 2), this._getValueCell(3, 1, 2)],
+			[this._getEmptyCell(), this._getEmptyCell(), this._getEmptyCell(), this._getEmptyCell()],
+			[this._getEmptyCell(), this._getEmptyCell(), this._getEmptyCell(), this._getEmptyCell()]
 		];
 		const initialState = {
 			previousCells: JSON.parse(JSON.stringify(initialCells)),
@@ -43,17 +38,12 @@ export class ControllerService {
 
 	}
 
-	private _getEmptyCell(X: number, Y: number): ICellProps {
-		return {
-			ID: this._nextCellId,
-			X,
-			Y,
-			isPresent: false
-		};
+	private _getEmptyCell(): ICellProps {
+		return { X: 0, Y: 0, isPresent: false };
 	}
 
 	private _getValueCell(X: number, Y: number, value: number): ICellProps {
-		return {...this._getEmptyCell(X, Y), value, isPresent: true};
+		return { X, Y, value, isPresent: true};
 	}
 
 	private _subscribeToSwipes() {

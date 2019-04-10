@@ -1,4 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {CellColors} from '../../constants/cell-colors';
 
 @Component({
 	selector: 'app-cell',
@@ -17,5 +18,9 @@ export class CellComponent {
 
 	public get left(): string {
 		return `${this.X * 70}px`;
+	}
+
+	public get color(): string {
+		return CellColors[this.value];
 	}
 }

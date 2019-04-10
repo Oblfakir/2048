@@ -1,7 +1,7 @@
 <div class="cell"
 	[style.top]="top"
 	[style.left]="left">
-	<div class="cell__content" *ngIf="value">
+	<div class="cell__content" *ngIf="value" [style.background]="color">
 		{{value}}
 	</div>
 </div>
