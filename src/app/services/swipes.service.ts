@@ -45,7 +45,7 @@ export class SwipesService {
 	private _angleToSwipeDirection(angle: number): void {
 		switch (true) {
 			case (angle >= -180 && angle <= -135) || (angle <= 180 && angle >= 135): {
-				this._swipes.next(Swipes.RIGHT);
+				this._swipes.next(Swipes.LEFT);
 				break;
 			}
 			case angle >= 45 && angle <= 135: {
@@ -53,7 +53,7 @@ export class SwipesService {
 				break;
 			}
 			case (angle >= 0 && angle <= 45) || (angle <= 0 && angle >= -45): {
-				this._swipes.next(Swipes.LEFT);
+				this._swipes.next(Swipes.RIGHT);
 				break;
 			}
 			case angle >= -135 && angle <= -45: {
