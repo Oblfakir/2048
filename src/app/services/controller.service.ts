@@ -21,7 +21,7 @@ export class ControllerService {
 			],
 			[
 				Helpers.getValueCell(0, 1, 4),
-				Helpers.getEmptyCell(1, 1),
+				Helpers.getValueCell(1, 1, 4),
 				Helpers.getValueCell(2, 1, 2),
 				Helpers.getValueCell(3, 1, 2)
 			],
@@ -79,6 +79,7 @@ export class ControllerService {
 		const { currentCells } = fieldState;
 
 		Helpers.movePairs(fieldState, currentCells, Swipes.RIGHT);
+		Helpers.moveSingles(fieldState, Swipes.RIGHT);
 
 		this._fieldState.next(fieldState);
 	}
@@ -88,6 +89,7 @@ export class ControllerService {
 		const { currentCells } = fieldState;
 
 		Helpers.movePairs(fieldState, currentCells, Swipes.LEFT);
+		Helpers.moveSingles(fieldState, Swipes.LEFT);
 
 		this._fieldState.next(fieldState);
 	}
@@ -97,6 +99,7 @@ export class ControllerService {
 		const rows = Helpers.getColumns(fieldState.currentCells);
 
 		Helpers.movePairs(fieldState, rows, Swipes.UP);
+		Helpers.moveSingles(fieldState, Swipes.UP);
 
 		this._fieldState.next(fieldState);
 	}
@@ -106,6 +109,7 @@ export class ControllerService {
 		const rows = Helpers.getColumns(fieldState.currentCells);
 
 		Helpers.movePairs(fieldState, rows, Swipes.DOWN);
+		Helpers.moveSingles(fieldState, Swipes.DOWN);
 
 		this._fieldState.next(fieldState);
 	}

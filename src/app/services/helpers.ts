@@ -112,6 +112,69 @@ export class Helpers {
 		return fieldState;
 	}
 
+	public static moveSingles(fieldState: IFieldState, swipe: Swipes): IFieldState {
+		let columns;
+
+		if (swipe === Swipes.UP || swipe === Swipes.DOWN) {
+			columns = Helpers.getColumns(fieldState.currentCells);
+		}
+
+		for (let i = 0; i < 4; i ++) {
+			switch (swipe) {
+				case Swipes.LEFT: {
+					const row = fieldState.currentCells[i];
+					const valuedCells = row.filter(x => x.isPresent).map(x => ({ value: x.value, isPresent: x.isPresent }));
+					row.forEach(cell => { cell.isPresent = false; cell.value = undefined; });
+
+					valuedCells.forEach((x, index) => {
+						row[index].value = x.value;
+						row[index].isPresent = true;
+					});
+
+					break;
+				}
+				case Swipes.UP: {
+					const column = columns[i];
+					const valuedCells = column.filter(x => x.isPresent).map(x => ({ value: x.value, isPresent: x.isPresent }));
+					column.forEach(cell => { cell.isPresent = false; cell.value = undefined; });
+
+					valuedCells.forEach((x, index) => {
+						column[index].value = x.value;
+						column[index].isPresent = true;
+					});
+
+					break;
+				}
+				case Swipes.RIGHT: {
+					const row = fieldState.currentCells[i];
+					const valuedCells = row.filter(x => x.isPresent).map(x => ({ value: x.value, isPresent: x.isPresent }));
+					row.forEach(cell => { cell.isPresent = false; cell.value = undefined; });
+
+					valuedCells.reverse().forEach((x, index) => {
+						row[3 - index].value = x.value;
+						row[3 - index].isPresent = true;
+					});
+
+					break;
+				}
+				case Swipes.DOWN: {
+					const column = columns[i];
+					const valuedCells = column.filter(x => x.isPresent).map(x => ({ value: x.value, isPresent: x.isPresent }));
+					column.forEach(cell => { cell.isPresent = false; cell.value = undefined; });
+
+					valuedCells.reverse().forEach((x, index) => {
+						column[3 - index].value = x.value;
+						column[3 - index].isPresent = true;
+					});
+					break;
+				}
+				default: return fieldState;
+			}
+		}
+
+		return fieldState;
+	}
+
 	public static getEmptyCells() {
 
 	}
