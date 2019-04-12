@@ -175,11 +175,23 @@ export class Helpers {
 		return fieldState;
 	}
 
-	public static getEmptyCells() {
+	public static getEmptyCells(cells: ICellProps[][]) {
+		const result = [];
 
+		for (let i = 0; i < 4; i ++) {
+			for (let j = 0; j < 4; j ++) {
+				if (!cells[i][j].isPresent) {
+					result.push(cells[i][j]);
+				}
+			}
+		}
+
+		return result;
 	}
 
-	public static addRandomCell() {
-
+	public static addRandomCell(emptyCells: ICellProps[]) {
+		const index = Math.floor(Math.random() * emptyCells.length);
+		emptyCells[index].value = 2;
+		emptyCells[index].isPresent = true;
 	}
 }

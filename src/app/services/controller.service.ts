@@ -81,6 +81,9 @@ export class ControllerService {
 		Helpers.movePairs(fieldState, currentCells, Swipes.RIGHT);
 		Helpers.moveSingles(fieldState, Swipes.RIGHT);
 
+		const emptyCells = Helpers.getEmptyCells(currentCells);
+		Helpers.addRandomCell(emptyCells);
+
 		this._fieldState.next(fieldState);
 	}
 
@@ -91,25 +94,36 @@ export class ControllerService {
 		Helpers.movePairs(fieldState, currentCells, Swipes.LEFT);
 		Helpers.moveSingles(fieldState, Swipes.LEFT);
 
+		const emptyCells = Helpers.getEmptyCells(currentCells);
+		Helpers.addRandomCell(emptyCells);
+
 		this._fieldState.next(fieldState);
 	}
 
 	private _handleSwipeUp(): void {
 		const fieldState = this._getFieldWithPreviousState();
+		const { currentCells } = fieldState;
 		const rows = Helpers.getColumns(fieldState.currentCells);
 
 		Helpers.movePairs(fieldState, rows, Swipes.UP);
 		Helpers.moveSingles(fieldState, Swipes.UP);
+
+		const emptyCells = Helpers.getEmptyCells(currentCells);
+		Helpers.addRandomCell(emptyCells);
 
 		this._fieldState.next(fieldState);
 	}
 
 	private _handleSwipeDown(): void {
 		const fieldState = this._getFieldWithPreviousState();
+		const { currentCells } = fieldState;
 		const rows = Helpers.getColumns(fieldState.currentCells);
 
 		Helpers.movePairs(fieldState, rows, Swipes.DOWN);
 		Helpers.moveSingles(fieldState, Swipes.DOWN);
+
+		const emptyCells = Helpers.getEmptyCells(currentCells);
+		Helpers.addRandomCell(emptyCells);
 
 		this._fieldState.next(fieldState);
 	}
