@@ -34,7 +34,7 @@ export class ControllerService {
 			[
 				Helpers.getEmptyCell(0, 3),
 				Helpers.getEmptyCell(1, 3),
-				Helpers.getEmptyCell(2, 3),
+				Helpers.getValueCell(2, 3, 2),
 				Helpers.getEmptyCell(3, 3)
 			]
 		];
@@ -48,14 +48,6 @@ export class ControllerService {
 
 	public get fieldState(): Observable<IFieldState> {
 		return this._fieldState.asObservable();
-	}
-
-	private _getEmptyCells() {
-
-	}
-
-	private _addRandomCell() {
-
 	}
 
 	private _subscribeToSwipes() {
@@ -86,18 +78,7 @@ export class ControllerService {
 		const fieldState = this._getFieldWithPreviousState();
 		const { currentCells } = fieldState;
 
-		for (let i = 0; i < 4; i ++) {
-			const equals = Helpers.checkRowForEqualNumbers(currentCells[i]);
-
-			equals.forEach(pair => {
-				const { X, Y } = Helpers.findPlaceForMerged(currentCells[i], pair, Swipes.RIGHT);
-				fieldState.currentCells[Y][X] = Helpers.getValueCell(X, Y, pair[0].value + pair[1].value);
-				pair[0].value = undefined;
-				pair[1].value = undefined;
-				pair[0].isPresent = false;
-				pair[1].isPresent = false;
-			});
-		}
+		Helpers.movePairs(fieldState, currentCells, Swipes.RIGHT);
 
 		this._fieldState.next(fieldState);
 	}
@@ -106,42 +87,25 @@ export class ControllerService {
 		const fieldState = this._getFieldWithPreviousState();
 		const { currentCells } = fieldState;
 
-		for (let i = 0; i < 4; i ++) {
-			const equals = Helpers.checkRowForEqualNumbers(currentCells[i]);
-
-			equals.forEach(pair => {
-				const { X, Y } = Helpers.findPlaceForMerged(currentCells[i], pair, Swipes.LEFT);
-				fieldState.currentCells[Y][X] = Helpers.getValueCell(X, Y, pair[0].value + pair[1].value);
-				pair[0].value = undefined;
-				pair[1].value = undefined;
-				pair[0].isPresent = false;
-				pair[1].isPresent = false;
-			});
-		}
+		Helpers.movePairs(fieldState, currentCells, Swipes.LEFT);
 
 		this._fieldState.next(fieldState);
 	}
 
 	private _handleSwipeUp(): void {
 		const fieldState = this._getFieldWithPreviousState();
+		const rows = Helpers.getColumns(fieldState.currentCells);
 
-		for (let i = 0; i < 4; i ++) {
-			for (let j = 0; j < 4; j ++) {
-
-			}
-		}
+		Helpers.movePairs(fieldState, rows, Swipes.UP);
 
 		this._fieldState.next(fieldState);
 	}
 
 	private _handleSwipeDown(): void {
 		const fieldState = this._getFieldWithPreviousState();
+		const rows = Helpers.getColumns(fieldState.currentCells);
 
-		for (let i = 0; i < 4; i ++) {
-			for (let j = 0; j < 4; j ++) {
-
-			}
-		}
+		Helpers.movePairs(fieldState, rows, Swipes.DOWN);
 
 		this._fieldState.next(fieldState);
 	}
@@ -149,7 +113,6 @@ export class ControllerService {
 	private _getFieldWithPreviousState(): IFieldState {
 		const fieldState = this._fieldState.getValue();
 		fieldState.previousCells = JSON.parse(JSON.stringify(fieldState.currentCells));
-		fieldState.currentCells = JSON.parse(JSON.stringify(fieldState.currentCells));
 		return fieldState;
 	}
 }
