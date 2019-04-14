@@ -1,6 +1,6 @@
-import {ICellProps} from '../interfaces/cell-props.interface';
-import {Swipes} from '../constants';
-import {IFieldState} from '../interfaces/field-state.interface';
+import { ICellProps } from '../interfaces/cell-props.interface';
+import { Swipes } from '../constants';
+import { IFieldState } from '../interfaces/field-state.interface';
 
 export class Helpers {
 	public static getEmptyCell(X: number, Y: number): ICellProps {
@@ -8,7 +8,43 @@ export class Helpers {
 	}
 
 	public static getValueCell(X: number, Y: number, value: number): ICellProps {
-		return { X, Y, value, isPresent: true};
+		return { X, Y, value, isPresent: true };
+	}
+
+	public static getInitialState(): IFieldState {
+		return 	{
+			previousCells: JSON.parse(JSON.stringify(Helpers._getInitialCells())),
+			currentCells: JSON.parse(JSON.stringify(Helpers._getInitialCells())),
+		};
+	}
+
+	private static _getInitialCells(): ICellProps[][] {
+		return [
+			[
+				Helpers.getEmptyCell(0, 0),
+				Helpers.getEmptyCell(1, 0),
+				Helpers.getEmptyCell(2, 0),
+				Helpers.getEmptyCell(3, 0)
+			],
+			[
+				Helpers.getValueCell(0, 1, 4),
+				Helpers.getValueCell(1, 1, 4),
+				Helpers.getValueCell(2, 1, 2),
+				Helpers.getValueCell(3, 1, 2)
+			],
+			[
+				Helpers.getEmptyCell(0, 2),
+				Helpers.getEmptyCell(1, 2),
+				Helpers.getEmptyCell(2, 2),
+				Helpers.getEmptyCell(3, 2)
+			],
+			[
+				Helpers.getEmptyCell(0, 3),
+				Helpers.getEmptyCell(1, 3),
+				Helpers.getValueCell(2, 3, 2),
+				Helpers.getEmptyCell(3, 3)
+			]
+		];
 	}
 
 	public static checkRowForEqualNumbers(cells: ICellProps[]): ICellProps[][] {
@@ -16,15 +52,15 @@ export class Helpers {
 		const arr = [...cells];
 		const usedCells = [];
 
-		for (let i = 0; i < 4; i ++) {
-			for (let j = i + 1; j < 4; j ++) {
+		for (let i = 0; i < 4; i++) {
+			for (let j = i + 1; j < 4; j++) {
 				if (!arr[i].isPresent || !arr[j].isPresent) { continue; }
 				if (arr[i].value !== arr[j].value) { continue; }
 				if (usedCells.includes(arr[i]) || usedCells.includes(arr[j])) { continue; }
 
 				let isGapEmpty = true;
 
-				for (let k = i + 1; k < j; k ++) {
+				for (let k = i + 1; k < j; k++) {
 					if (cells[k].isPresent) {
 						isGapEmpty = false;
 					}
@@ -50,7 +86,7 @@ export class Helpers {
 				const sortedCellIndexes = cellIndexes.sort();
 				let result = { X, Y };
 
-				for (let i = sortedCellIndexes[0]; i >= 0; i --) {
+				for (let i = sortedCellIndexes[0]; i >= 0; i--) {
 					if (!row[i].isPresent) {
 						const { X: newX, Y: newY } = row[i];
 						result = { X: newX, Y: newY };
@@ -66,7 +102,7 @@ export class Helpers {
 				const sortedCellIndexes = cellIndexes.sort().reverse();
 				let result = { X, Y };
 
-				for (let i = sortedCellIndexes[0] + 1; i < 4; i ++) {
+				for (let i = sortedCellIndexes[0] + 1; i < 4; i++) {
 					if (!row[i].isPresent) {
 						const { X: newX, Y: newY } = row[i];
 						result = { X: newX, Y: newY };
@@ -82,10 +118,10 @@ export class Helpers {
 	public static getColumns(cells: ICellProps[][]): ICellProps[][] {
 		const rows = [];
 
-		for (let i = 0; i < 4; i ++) {
+		for (let i = 0; i < 4; i++) {
 			const row = [];
 
-			for (let j = 0; j < 4; j ++) {
+			for (let j = 0; j < 4; j++) {
 				row.push(cells[j][i]);
 			}
 
@@ -96,7 +132,7 @@ export class Helpers {
 	}
 
 	public static movePairs(fieldState: IFieldState, cells: ICellProps[][], swipe: Swipes): IFieldState {
-		for (let i = 0; i < 4; i ++) {
+		for (let i = 0; i < 4; i++) {
 			const equals = Helpers.checkRowForEqualNumbers(cells[i]);
 
 			equals.forEach((pair: ICellProps[]) => {
@@ -119,7 +155,7 @@ export class Helpers {
 			columns = Helpers.getColumns(fieldState.currentCells);
 		}
 
-		for (let i = 0; i < 4; i ++) {
+		for (let i = 0; i < 4; i++) {
 			switch (swipe) {
 				case Swipes.LEFT: {
 					const row = fieldState.currentCells[i];
@@ -178,8 +214,8 @@ export class Helpers {
 	public static getEmptyCells(cells: ICellProps[][]) {
 		const result = [];
 
-		for (let i = 0; i < 4; i ++) {
-			for (let j = 0; j < 4; j ++) {
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
 				if (!cells[i][j].isPresent) {
 					result.push(cells[i][j]);
 				}
@@ -193,5 +229,19 @@ export class Helpers {
 		const index = Math.floor(Math.random() * emptyCells.length);
 		emptyCells[index].value = 2;
 		emptyCells[index].isPresent = true;
+	}
+
+	public static checkForChanges(fieldState: IFieldState): boolean {
+		let result = false;
+
+		for (let i = 0; i < 4; i++) {
+			for (let j = 0; j < 4; j++) {
+				if (fieldState.currentCells[i][j].value !== fieldState.previousCells[i][j].value) {
+					result = true;
+				}
+			}
+		}
+
+		return result;
 	}
 }

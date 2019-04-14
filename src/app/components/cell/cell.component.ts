@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, ChangeDetectorRef} from '@angular/core';
 import {CellColors} from '../../constants/cell-colors';
 
 @Component({
@@ -8,9 +8,13 @@ import {CellColors} from '../../constants/cell-colors';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CellComponent {
-	@Input() public value: number;
-	@Input() public X: number;
-	@Input() public Y: number;
+	public value: number;
+	public X: number;
+	public Y: number;
+
+	constructor(private changeDetectorRef: ChangeDetectorRef) {
+		this.changeDetectorRef.detach();
+	}
 
 	public get top(): string {
 		return `${this.Y * 70}px`;
