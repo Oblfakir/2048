@@ -103,7 +103,7 @@ export class FieldComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	private _animateField(fieldState: IFieldState, endPositions: { X: number, Y: number }[]): Promise<void> {
+	private _animateField(fieldState: IFieldState, endPositions: any): Promise<void> {
 		return new Promise<void>((res, rej) => { res(); });
 	}
 
