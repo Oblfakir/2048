@@ -12,10 +12,6 @@ export class CellComponent {
 	public X: number;
 	public Y: number;
 
-	constructor(private changeDetectorRef: ChangeDetectorRef) {
-		this.changeDetectorRef.detach();
-	}
-
 	public get top(): string {
 		return `${this.Y * 70}px`;
 	}

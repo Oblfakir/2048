@@ -10,7 +10,7 @@ import {IFieldState} from '../../interfaces/field-state.interface';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WrapperComponent {
-	constructor(private controllerService: ControllerService) {
+	constructor() {
 	}
 
 	public get fieldState(): Observable<IFieldState> {
