@@ -1,16 +1,10 @@
-import {
-	Component,
-	ViewChild,
-	ViewContainerRef,
-	ComponentFactoryResolver,
-	ComponentRef,
-	OnInit,
-	OnDestroy
-} from '@angular/core';
+import {Component, ComponentFactoryResolver, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
 import {IFieldState} from '../../interfaces/field-state.interface';
 import {CellComponent} from '../cell/cell.component';
 import {ControllerService} from '../../services/controller.service';
 import {Subscription} from 'rxjs';
+import {Swipes} from '../../constants';
+import {ICellProps} from '../../interfaces/cell-props.interface';
 
 @Component({
 	selector: 'app-field',
@@ -28,17 +22,19 @@ export class FieldComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.controllerService.fieldState.subscribe((fieldState: IFieldState) => {
-			this._drawPreviousState(fieldState);
-			this._animateField(fieldState, this._calculateEndPositions(fieldState));
+			this._drawState(fieldState.previousCells);
+			this._animateField(fieldState, this._calculateEndPositions(fieldState)).then(() => {
+				this._drawState(fieldState.currentCells);
+			});
 		});
 	}
 
-	private _drawPreviousState(fieldState: IFieldState): void {
+	private _drawState(cells: ICellProps[][]): void {
 		this._currentCells.forEach(row => row.forEach(cell => cell.destroy()));
 
 		const factory = this.componentFactoryResolver.resolveComponentFactory(CellComponent);
 
-		fieldState.currentCells.forEach(row => {
+		cells.forEach(row => {
 			const subarr = [];
 
 			row.forEach(cell => {
@@ -56,12 +52,59 @@ export class FieldComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private _calculateEndPositions(fieldState: IFieldState): { X: number, Y: number }[] {
-		return [];
+	private _calculateEndPositions(fieldState: IFieldState): {[key: string]: { X: number, Y: number }} {
+		const result: {[key: string]: { X: number, Y: number }} = {};
+
+		switch (fieldState.swipe) {
+			case Swipes.LEFT: {
+				for (let i = 0; i < 4; i++) {
+					for (let j = 3; j >= 0; j --) {
+						if (fieldState.currentCells[i][j].isPresent && !result[i]) {
+							const { X, Y } = fieldState.currentCells[i][j];
+							result[i] = { X, Y };
+						}
+					}
+				}
+				return result;
+			}
+			case Swipes.RIGHT: {
+				for (let i = 0; i < 4; i++) {
+					for (let j = 0; j < 4; j ++) {
+						if (fieldState.currentCells[i][j].isPresent && !result[i]) {
+							const { X, Y } = fieldState.currentCells[i][j];
+							result[i] = { X, Y };
+						}
+					}
+				}
+				return result;
+			}
+			case Swipes.DOWN: {
+				for (let i = 0; i < 4; i++) {
+					for (let j = 0; j < 4; j ++) {
+						if (fieldState.currentCells[j][i].isPresent && !result[j]) {
+							const { X, Y } = fieldState.currentCells[j][i];
+							result[j] = { X, Y };
+						}
+					}
+				}
+				return result;
+			}
+			case Swipes.UP: {
+				for (let i = 0; i < 4; i++) {
+					for (let j = 3; j >= 0; j --) {
+						if (fieldState.currentCells[j][i].isPresent && !result[j]) {
+							const { X, Y } = fieldState.currentCells[j][i];
+							result[j] = { X, Y };
+						}
+					}
+				}
+				return result;
+			}
+		}
 	}
 
-	private _animateField(fieldState: IFieldState, endPositions: { X: number, Y: number }[]): void {
-
+	private _animateField(fieldState: IFieldState, endPositions: { X: number, Y: number }[]): Promise<void> {
+		return new Promise<void>((res, rej) => { res(); });
 	}
 
 	ngOnDestroy(): void {
